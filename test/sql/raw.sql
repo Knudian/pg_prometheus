@@ -43,7 +43,7 @@ SELECT prom_value(sample), prom_labels(sample) FROM metrics;
 -- Cleanup
 DROP TABLE metrics CASCADE;
 
---create table using functio and create the appropriate view
+--create table using function and create the appropriate view
 SELECT create_prometheus_table('metrics', normalized_tables=>false);
 INSERT INTO metrics VALUES ('cpu_usage{service="nginx",host="machine1"} 34.6 1494595898000'),
                            ('cpu_usage{service="nginx",host="machine2"} 10.3 1494595899000'),
@@ -61,4 +61,3 @@ EXPLAIN (costs off, verbose on) SELECT * FROM metrics
 WHERE time >  'Fri May 12 13:31:00 2017' AND
       name = 'cpu_usage' AND
       labels @> '{"service": "nginx", "host": "machine1"}';
-

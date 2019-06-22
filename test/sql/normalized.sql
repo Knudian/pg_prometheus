@@ -19,9 +19,8 @@ INSERT INTO input VALUES ('cpu_usage{service="nginx",host="machine1"} 34.6 14945
                          ('cpu_usage{service="nginx",host="machine1"} 30.2 1494595928000');
 
 INSERT INTO input(sample) VALUES ('cpu_usage{service="nginx",host="machine1"} 34.6 1494595898000'),
-                         ('cpu_usage{service="nginx",host="machine2"} 10.3 1494595899000'),
-                         ('cpu_usage{service="nginx",host="machine1"} 30.2 1494595928000');
-
+                                 ('cpu_usage{service="nginx",host="machine2"} 10.3 1494595899000'),
+                                 ('cpu_usage{service="nginx",host="machine1"} 30.2 1494595928000');
 
 SELECT * FROM input;
 SELECT * FROM input_values;

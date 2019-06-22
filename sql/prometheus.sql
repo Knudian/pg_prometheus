@@ -146,7 +146,7 @@ BEGIN
       ) INTO STRICT metric_labels_id;
     END IF;
 
-    EXECUTE format('INSERT INTO %I (time, value, labels_id) VALUES (%L, %L, %L)',
+    EXECUTE format('INSERT INTO %I (time, value, labels_id) VALUES (%L, %L, %L) ON CONFLICT DO NOTHING',
           values_table, prom_time(NEW.sample), prom_value(NEW.sample), metric_labels_id);
 
     RETURN NULL;
@@ -165,7 +165,7 @@ BEGIN
 
     sample_table := TG_ARGV[0];
 
-    EXECUTE format('INSERT INTO %I (sample) VALUES (%L)',
+    EXECUTE format('INSERT INTO %I (sample) VALUES (%L) ON CONFLICT DO NOTHING',
           sample_table, NEW.sample);
 
     RETURN NULL;
@@ -267,7 +267,7 @@ BEGIN
           --does not support foreign  references
           EXECUTE format(
               $$
-              CREATE TABLE %I (time TIMESTAMPTZ, value FLOAT8, labels_id INTEGER)
+              CREATE TABLE %I (time TIMESTAMPTZ, value FLOAT8, labels_id INTEGER, UNIQUE(time, value, labels_id))
               $$,
               metrics_values_table_name
           );
@@ -333,7 +333,7 @@ BEGIN
     ELSE
         EXECUTE format(
           $$
-          CREATE TABLE %I (sample prom_sample NOT NULL)
+          CREATE TABLE %I (sample prom_sample UNIQUE NOT NULL)
           $$,
           metrics_samples_table_name
         );
